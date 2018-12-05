@@ -1,0 +1,14 @@
+version: 2.1
+description: the opposite of [skip ci]
+
+commands:
+  check_commit_message:
+    description: exit 1 (and stop build) if there is no "run ci" in the comit message
+    steps:
+     - run: |
+        if git log --format=oneline -n 1 $CIRCLE_SHA1 | grep -e 'run ci' -e 'ci run'; then
+          echo RUN!!
+        else
+          echo 'STOP!! ("run ci" is not included in your comit message.)'
+          exit 1
+        fi
